@@ -4,54 +4,88 @@
  */
 module.exports = syntax;
 
-const { Term, Text, Opt, Alt, Repeat, Seq, Production } = require('../../lib/parser/combinator/combinators');
+const { Term, Text, Opt, Alt, Repeat, Seq, Prod } = require('../../lib/parser/combinator/combinators');
 
+// term = identifier | literal ;
 function term(input, pos) {
-  const parser = Production('term', Alt(Term('identifier', Term('literal'))));
+  const parser = Prod('term',
+    Alt(
+      Term('identifier'),
+      Term('literal')
+    )
+  );
   return parser(input, pos);
 }
 
-function group(input, pos) {
-  const parser = Production('group', Seq(Text('('), rhs, Text(')')));
-  return parser(input, pos);
-}
-
+// optional = "[" , rhs , "]" ;
 function optional(input, pos) {
-  const parser = Production('optional', Seq(Text('['), rhs, Text(']')));
+  const parser = Prod('optional',
+    Seq(Text('['), alter, Text(']'))
+  );
   return parser(input, pos);
 }
 
+// repeat = "{" , rhs , "}" ;
 function repeat(input, pos) {
-  const parser = Production('repeat', Seq(Text('{'), rhs, Text('}')));
+  const parser = Prod('repeat',
+    Seq(Text('{'), alter, Text('}'))
+  );
   return parser(input, pos);
 }
 
+// group = "(" , rhs , ")" ;
+function group(input, pos) {
+  const parser = Prod('group',
+    Seq(Text('('), alter, Text(')'))
+  );
+  return parser(input, pos);
+}
+
+// item = term | optional | repeat | group ;
 function item(input, pos) {
-  const parser = Production('item', Alt(term, group, optional, repeat));
+  const parser = Prod('item',
+    Alt(
+      term,
+      optional,
+      repeat,
+      group
+    )
+  );
   return parser(input, pos);
 }
 
+// list = item , "," , list | item;
 function list(input, pos) {
-  const parser = Production('list', Repeat(Seq(item, Opt(Text(',')))));
+  const parser = Prod('list',
+    Alt(
+      Seq(item, Text(','), list),
+      item
+    )
+  );
   return parser(input, pos);
-}
+} 
 
+// alter = list , "|" , alter | list;
 function alter(input, pos) {
-  const parser = Production('alter', Repeat(Seq(list, Opt(Text('|')))));
+  const parser = Prod('alter',
+    Alt(
+      Seq(list, Text('|'), alter),
+      list
+    )
+  );
   return parser(input, pos);
 }
 
-function rhs(input, pos) {
-  const parser = Production('rhs', Repeat(alter));
-  return parser(input, pos);
-}
-
+// rule = identifier , "=" , rhs , ";" ;
 function rule(input, pos) {
-  const parser = Production('rule', Seq(Term('identifier'), Text('='), rhs, Text(';')));
+  const parser = Prod('rule',
+    Seq(Term('identifier'), Text('='), alter, Text(';'))
+  );
   return parser(input, pos);
 }
 
+// syntax = { rule } ;
 function syntax(input, pos) {
-  const parser = Production('syntax', Repeat(rule));
+  const parser = Prod('syntax', Repeat(rule));
   return parser(input, pos);
 }

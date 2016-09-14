@@ -1,0 +1,14 @@
+(* defined by lexer *)
+identifier = ? lexer type identifier ? ;
+literal = ? lexer type literal ? ;
+
+(* grammar *)
+term = identifier | literal ;
+group = "(" , alter , ")" ;
+optional = "[" , alter , "]" ;
+repeat = "{" , alter , "}" ;
+item = term | optional | repeat | group ;
+list = item , "," , list | item;
+alter = list , "|" , alter | list;
+rule = identifier , "=" , alter , ";" ;
+syntax = { rule };

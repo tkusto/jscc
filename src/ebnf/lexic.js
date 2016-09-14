@@ -14,7 +14,7 @@ const punctuation = Text(
 
 const identifier = Pattern(
   'identifier',
-  /([a-z_-](?:[\w\d_-\s]*[\w\d_])?)/i,
+  /([a-z_-](?:[\w\d -]*[\w\d])?)/i,
   m => m[1]
 );
 
