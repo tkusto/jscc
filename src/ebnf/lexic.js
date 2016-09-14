@@ -14,7 +14,7 @@ const punctuation = Text(
 
 const identifier = Pattern(
   'identifier',
-  /([\w_-](?:[\w\d_-\s]*[\w\d_])?)/i,
+  /([a-z_-](?:[\w\d_-\s]*[\w\d_])?)/i,
   m => m[1]
 );
 
@@ -35,6 +35,6 @@ const comment = Pattern(
  * @module src/ebnf/lexic
  */
 module.exports = Lexer(
-  [whitespace, comment, punctuation, identifier, literal],
+  [whitespace, comment, punctuation, literal, identifier],
   new Set(['whitespace', 'comment'])
 );
