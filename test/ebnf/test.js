@@ -1,9 +1,9 @@
 const { inspect } = require('util');
 const ins = value => inspect(value, { showHidden: false, depth: null });
 
-const Lex = require('./lexic');
-const Parse = require('../parser/combinator/parse');
-const syntax = require('./grammar');
+const Lex = require('../../lib/ebnf/lexic');
+const Parse = require('../../lib/parser/combinator/parse');
+const syntax = require('../../lib/ebnf/grammar');
 
 const source = [
   'number = digit , {number};',
