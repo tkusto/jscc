@@ -8,7 +8,8 @@ const syntax = require('./grammar');
 const source = [
   'number = digit , {number};',
   'mul = number , "*", mul;',
-  'add = mul , "+" , add;'
+  'add = mul , "+" , add;',
+  'expr = add | paren;'
 ].join('\n');
 
 console.log(source);
