@@ -6,10 +6,9 @@ const Parse = require('../../lib/parser/combinator/parse');
 const syntax = require('../../lib/ebnf/grammar');
 
 const source = [
-  'number = digit , {number};',
-  'mul = number , "*", mul;',
-  'add = mul , "+" , add;',
-  'expr = add | paren;'
+  'number = digit , {number} ;',
+  'mul = number , "*", mul | number ;',
+  'add = mul , "+" , add | mul ;'
 ].join('\n');
 
 console.log(source);
