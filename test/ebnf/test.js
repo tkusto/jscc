@@ -5,7 +5,7 @@ const Lex = require('../../lib/ebnf/lexic');
 const Parse = require('../../lib/parser/combinator/parse');
 const syntax = require('../../lib/ebnf/grammar');
 const AST = require('../../lib/ebnf/ast');
-const dfs = require('../../lib/tree/dfs');
+const dfs = require('../../lib/ast/dfs');
 
 const source = [
   'number = digit , {number} ;',
